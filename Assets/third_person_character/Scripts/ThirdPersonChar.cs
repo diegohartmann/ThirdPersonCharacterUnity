@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,19 +9,31 @@ public class ThirdPersonChar : MonoBehaviour{
     [Header("INSIDE 'PLAYER UI'")] public GameObject pausePanel = null;
     [Header("CHARACTER'S BACKPACK")]
     public Transform backpack = null;
-    public KeyCode[] numPadsInputs = new KeyCode[] {
+    public int selectedBackPackItem = 0;
+    public KeyCode clearHandInput = KeyCode.Alpha0;
+    public KeyCode[] itemsSelectInputs = new KeyCode[] {
         KeyCode.Alpha1,
         KeyCode.Alpha2,
-        KeyCode.Alpha3
+        KeyCode.Alpha3,
+        KeyCode.Alpha4,
+        KeyCode.Alpha5,
+        KeyCode.Alpha6,
+        KeyCode.Alpha7,
+        KeyCode.Alpha8,
+        KeyCode.Alpha9
     };
+    public List <int> gotItems = new List<int>();
+
     [Header("SCRIPTABLE OBJECT")] public ThirdPersonCharStatus status = null;
-    [HideInInspector]public ThirdPersonCharController controller;
+    [HideInInspector]public ThirdPersonCharWalk walk;
+    [HideInInspector]public ThirdPersonCharJump jump;
+    [HideInInspector]public ThirdPersonCharBackPack backPack;
     [HideInInspector]public ThirdPersonCharUpdate updater;
     [HideInInspector]public ThirdPersonCharInputs inputs;
     [HideInInspector]public ThirdPersonCharPause pause;
-    [HideInInspector]public ThirdPersonCharBackPack backPack;
     [HideInInspector]public Rigidbody rb;
     [HideInInspector]public Transform charTransform;
+    // [HideInInspector]public List <int> gotItems = new List<int>();
 
 
     // private void OnEnable() {
@@ -29,12 +42,12 @@ public class ThirdPersonChar : MonoBehaviour{
     // }
     // private void OnDestroy() {
     // }
-
     
     private void Awake() {
         rb = getRb();
         charTransform = this.transform;
-        controller = new ThirdPersonCharController(this);
+        walk = new ThirdPersonCharWalk(this);
+        jump = new ThirdPersonCharJump(this);
         updater = new ThirdPersonCharUpdate(this);
         inputs = new ThirdPersonCharInputs();
         pause = new ThirdPersonCharPause(this);

@@ -14,7 +14,8 @@ public struct ThirdPersonCharUpdate{
     }
     private void GameplayUpdater(){
         if (!tpChar.pause.paused) { 
-            tpChar.controller.Updater();
+            tpChar.jump.Updater();
+            tpChar.walk.Updater();
             tpChar.backPack.Updater();
         }
     }

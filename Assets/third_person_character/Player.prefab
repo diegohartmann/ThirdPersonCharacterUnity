@@ -942,7 +942,10 @@ MonoBehaviour:
   cam: {fileID: 2533893415900433403}
   pausePanel: {fileID: 7441142829683458729}
   backpack: {fileID: 586272255083974691}
-  numPadsInputs: 310000003200000033000000
+  selectedBackPackItem: 0
+  clearHandInput: 48
+  itemsSelectInputs: 3100000032000000330000003400000035000000360000003700000038000000
+  gotItems: 02000000040000000600000008000000
   status: {fileID: 11400000, guid: e4ca438c9984df745b409f2e2d15885c, type: 2}
   rb: {fileID: 0}
   charTransform: {fileID: 0}
