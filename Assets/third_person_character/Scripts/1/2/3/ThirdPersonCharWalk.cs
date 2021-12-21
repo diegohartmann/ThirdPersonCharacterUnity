@@ -1,9 +1,5 @@
 using UnityEngine;
-public enum InclinationOnRun
-{
-    Forwards,
-    Backwards
-}
+
 public struct ThirdPersonCharWalk{
 
     private float speed;
@@ -12,13 +8,13 @@ public struct ThirdPersonCharWalk{
     private const int xRotMax = 20;
     private const int xRotSpeed = 100;
     private float currAngle;
-    private ThirdPersonCharReferences refs;
-    public ThirdPersonCharWalk(ThirdPersonCharReferences _refs){
+    private ThirdPersonChar tpChar;
+    public ThirdPersonCharWalk(ThirdPersonChar _tpChar){
         xRot = 0;
         currAngle = 0;
         turnSmoothVelocity = 0;
         speed=0;
-        refs = _refs;
+        tpChar = _tpChar;
     }
     
     public void Updater(){
@@ -26,12 +22,12 @@ public struct ThirdPersonCharWalk{
         MovementCheck();
     }
     private void SpeedCheck(){
-        if (refs.inputs.RunInput()){
+        if (tpChar.inputs.RunInput()){
             Run();
             return;
         }
-        TryToInclinateBody(InclinationOnRun.Backwards);
-        if (refs.inputs.SlowInput()){
+        TryToInclinateBody(false);
+        if (tpChar.inputs.SlowInput()){
             Slow();
             return;
         }
@@ -39,10 +35,10 @@ public struct ThirdPersonCharWalk{
     }
     
     private Vector3 Direction(){
-        return new Vector3 (refs.inputs.HorizontalInput(), 0, refs.inputs.VerticalInput()).normalized;
+        return new Vector3 (tpChar.inputs.HorizontalInput(), 0, tpChar.inputs.VerticalInput()).normalized;
     }
     private Vector3 RBVerticalVel(){
-        return new Vector3(0, refs.rb.velocity.y, 0);
+        return new Vector3(0, tpChar.rb.velocity.y, 0);
     }
     private float TargetAngle(){
         return (Mathf.Atan2( Direction().x, Direction().z ) * Mathf.Rad2Deg) + CamEulerY();
@@ -51,67 +47,64 @@ public struct ThirdPersonCharWalk{
         return (_moveDir.normalized * speed * _speedMult * Time.deltaTime);
     }
     private float CharEulerY(){
-        return refs.charTransform.eulerAngles.y;
+        return tpChar.charTransform.eulerAngles.y;
     }
     private float CamEulerY(){
-        return refs.cam.eulerAngles.y;
+        return tpChar.cam.eulerAngles.y;
     }
     private void MovementCheck(){
-        if(refs.inputs.IsGroundMoving()){
+        if(tpChar.inputs.IsGroundMoving()){
             currAngle = CharEulerY();
         }
         _PlayerMovement();
         PlayerRotation();
     }
     private void PlayerRotation(){
-        refs.charTransform.rotation = Quaternion.Euler(xRot, currAngle, 0);
+        tpChar.charTransform.rotation = Quaternion.Euler(xRot, currAngle, 0);
     }
     private Vector3 MoveDirection(){
         return Quaternion.Euler(0, TargetAngle(), 0) * (Vector3.forward);
     }
     private void _PlayerMovement(){
         if (Direction().magnitude >= 0.1f){
-            currAngle = Mathf.SmoothDampAngle(CharEulerY(), TargetAngle(), ref turnSmoothVelocity, refs.status.turnSmoothTime);
+            currAngle = Mathf.SmoothDampAngle(CharEulerY(), TargetAngle(), ref turnSmoothVelocity, tpChar.status.turnSmoothTime * Time.deltaTime * 10);
             SetRigidbodyVelocity(RBVel(MoveDirection(), 50) + RBVerticalVel());
             return;
         }
         SetRigidbodyVelocity(RBVerticalVel());
     }
     private void SetRigidbodyVelocity(Vector3 _vel){
-        if(refs.rb.velocity != _vel){
-            refs.rb.velocity = _vel;
+        if(tpChar.rb.velocity != _vel){
+            tpChar.rb.velocity = _vel;
         }
     }
     private void Run(){
-        speed = refs.status.runSpeed;
-        TryToInclinateBody(InclinationOnRun.Forwards);
+        speed = tpChar.status.runSpeed;
+        TryToInclinateBody(true);
     }
     private void Walk(){
-        speed = refs.status.walkSpeed;
+        speed = tpChar.status.walkSpeed;
     }
     private void Slow(){
-        speed = refs.status.slowSpeed;
+        speed = tpChar.status.slowSpeed;
     }
-    private void TryToInclinateBody(InclinationOnRun _inclinationType){
-        if(refs.status.inclinatesForwardOnRun){
-            switch (_inclinationType){
-                case InclinationOnRun.Forwards:
+    private void TryToInclinateBody(bool _forwards){
+        if(tpChar.status.inclinatesForwardOnRun){
+            if (_forwards){
                 if (xRot < xRotMax){
                     xRot += Time.deltaTime * xRotSpeed;
                 }
-                break;
-                case InclinationOnRun.Backwards:
-                    if (xRot > 0){
-                        xRot -= Time.deltaTime * xRotSpeed;
-                    }
-                break;
+                return;
+            }
+            if (xRot > 0){
+                xRot -= Time.deltaTime * xRotSpeed;
             }
         }
     }
   
     // private void RotateTronco(){
-    //     if(refs.tronco){
-    //         refs.tronco.Rotate(speed*50 * Time.deltaTime, 0, 0);
+    //     if(tpChar.tronco){
+    //         tpChar.tronco.Rotate(speed*50 * Time.deltaTime, 0, 0);
     //     }
     // }
 }

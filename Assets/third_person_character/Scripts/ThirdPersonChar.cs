@@ -2,14 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-class ThirdPersonChar : MonoBehaviour{
+public class ThirdPersonChar : MonoBehaviour{
 
-    [SerializeField] private Transform cam = null;
-    [SerializeField] private GameObject pausePanel = null;
-
-    private ThirdPersonCharReferences refs;
-    private ThirdPersonCharUpdate updater;
-    [SerializeField] private ThirdPersonCharStatus status = null;
+    [Header("CAM WITH 'CAMERA' COMPONENT")] public Transform cam = null;
+    [Header("INSIDE 'PLAYER UI'")] public GameObject pausePanel = null;
+    [Header("CHARACTER'S BACKPACK")]
+    public Transform backpack = null;
+    public KeyCode[] numPadsInputs = new KeyCode[] {
+        KeyCode.Alpha1,
+        KeyCode.Alpha2,
+        KeyCode.Alpha3
+    };
+    [Header("SCRIPTABLE OBJECT")] public ThirdPersonCharStatus status = null;
+    [HideInInspector]public ThirdPersonCharController controller;
+    [HideInInspector]public ThirdPersonCharUpdate updater;
+    [HideInInspector]public ThirdPersonCharInputs inputs;
+    [HideInInspector]public ThirdPersonCharPause pause;
+    [HideInInspector]public ThirdPersonCharBackPack backPack;
+    [HideInInspector]public Rigidbody rb;
+    [HideInInspector]public Transform charTransform;
 
 
     // private void OnEnable() {
@@ -19,16 +30,18 @@ class ThirdPersonChar : MonoBehaviour{
     // private void OnDestroy() {
     // }
 
+    
     private void Awake() {
-        DestroyOtherCameras();
-        refs = new ThirdPersonCharReferences(
-            new ThirdPersonCharInputs(),
-            getRb(),
-            cam,
-            this.transform,
-            status,
-            pausePanel
-        );
+        rb = getRb();
+        charTransform = this.transform;
+        controller = new ThirdPersonCharController(this);
+        updater = new ThirdPersonCharUpdate(this);
+        inputs = new ThirdPersonCharInputs();
+        pause = new ThirdPersonCharPause(this);
+        backPack = new ThirdPersonCharBackPack(this);
+    }
+    public void ResumeGameButton(){
+        pause.SetPaused(false);
     }
     private void DestroyOtherCameras(){
         Camera[] _cams = GameObject.FindObjectsOfType<Camera>();
@@ -70,7 +83,7 @@ class ThirdPersonChar : MonoBehaviour{
     }
     
     private void Update() {
-        refs.update.Updater();
+        updater.Updater();
     }
 
     // private void OnCollisionEnter(Collision collision){

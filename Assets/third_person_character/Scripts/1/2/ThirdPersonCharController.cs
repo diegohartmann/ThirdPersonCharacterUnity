@@ -1,18 +1,14 @@
 ﻿using UnityEngine;
 public struct ThirdPersonCharController{
-    private ThirdPersonCharReferences refs;
     private ThirdPersonCharWalk walk;
     private ThirdPersonCharJump jump;
 
-    public ThirdPersonCharController(ThirdPersonCharReferences _refs){
-        refs = _refs;
-        jump = new ThirdPersonCharJump(refs);
-        walk = new ThirdPersonCharWalk(refs);
+    public ThirdPersonCharController(ThirdPersonChar _tpChar){
+        jump = new ThirdPersonCharJump(_tpChar);
+        walk = new ThirdPersonCharWalk(_tpChar);
     }
     public void Updater(){
-        // if( ThirdPersonCharPlayState.state == PlayState.Running ){
-            walk.Updater();
-            jump.Updater();
-        // }
+        walk.Updater();
+        jump.Updater();
     }
 }

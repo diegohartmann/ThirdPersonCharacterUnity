@@ -2,17 +2,24 @@
 
 public struct ThirdPersonCharPause 
 {
-    private ThirdPersonCharReferences refs;
+    private ThirdPersonChar tpChar;
     [HideInInspector] public bool paused;
-    public ThirdPersonCharPause(ThirdPersonCharReferences _refs){
-        refs = _refs;
+    public ThirdPersonCharPause(ThirdPersonChar _tpChar){
+        tpChar = _tpChar;
         paused = false;
+        SetPaused(false);
     }
     public void Updater(){
-        if(refs.inputs.PauseInput()){
-            paused = !paused;
-            refs.pausePanel.SetActive(paused);
-            Time.timeScale = paused ? 0 : 1;
+        if(tpChar.inputs.PauseInput()){
+            PauseToggle();
         }
+    }
+    private void PauseToggle(){
+        SetPaused(!paused);
+    }
+    public void SetPaused(bool _paused){
+        paused = _paused;
+        tpChar.pausePanel.SetActive(paused);
+        Time.timeScale = paused ? 0 : 1;
     }
 }

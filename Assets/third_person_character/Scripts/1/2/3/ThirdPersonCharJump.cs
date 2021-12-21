@@ -3,14 +3,14 @@ using UnityEngine;
 public struct ThirdPersonCharJump
 {
     private float jumpFuel;
-    private ThirdPersonCharReferences refs;
-    public ThirdPersonCharJump(ThirdPersonCharReferences _refs){
-        refs = _refs;
+    private ThirdPersonChar tpChar;
+    public ThirdPersonCharJump(ThirdPersonChar _tpChar){
+        tpChar = _tpChar;
         jumpFuel = 0;
     }
     public void Updater(){
-        if (refs.status.jumpable){
-            if (refs.inputs.JumpInput() && HasJumpFuel()){
+        if (tpChar.status.jumpable){
+            if (tpChar.inputs.JumpInput() && HasJumpFuel()){
                 Jump();
                 jumpFuel = 0;
                 return;
@@ -24,7 +24,7 @@ public struct ThirdPersonCharJump
         return jumpFuel >= 1;
     }
     private void Jump(){
-        refs.rb.AddForce(Vector3.up * (FrameIndependent(refs.status.jumpForce, 5000)), ForceMode.Acceleration);
+        tpChar.rb.AddForce(Vector3.up * (FrameIndependent(tpChar.status.jumpForce, 5000)), ForceMode.Acceleration);
     }
     private float FrameIndependent(float _mult1, float _mult2 = 1){
         return _mult1 * _mult2 * Time.deltaTime;

@@ -1,20 +1,21 @@
 ﻿using UnityEngine;
 
 public struct ThirdPersonCharUpdate{
-    private ThirdPersonCharReferences refs;
-    public ThirdPersonCharUpdate(ThirdPersonCharReferences _refs){
-        refs = _refs;
+    private ThirdPersonChar tpChar;
+    public ThirdPersonCharUpdate(ThirdPersonChar _tpChar){
+        tpChar = _tpChar;
     }
     public void Updater(){
         GeralUpdater();
         GameplayUpdater();
     }
     private void GeralUpdater(){
-        refs.pause.Updater();
+        tpChar.pause.Updater();
     }
     private void GameplayUpdater(){
-        if (!refs.pause.paused) { 
-            refs.controller.Updater();
+        if (!tpChar.pause.paused) { 
+            tpChar.controller.Updater();
+            tpChar.backPack.Updater();
         }
     }
 }
