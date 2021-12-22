@@ -3,38 +3,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ThirdPersonChar : MonoBehaviour{
-
-    [Header("CAM WITH 'CAMERA' COMPONENT")] public Transform cam = null;
-    [Header("INSIDE 'PLAYER UI'")] public GameObject pausePanel = null;
-    [Header("CHARACTER'S BACKPACK")]
-    public Transform backpack = null;
-    public int selectedBackPackItem = 0;
-    public KeyCode clearHandInput = KeyCode.Alpha0;
-    public KeyCode[] itemsSelectInputs = new KeyCode[] {
-        KeyCode.Alpha1,
-        KeyCode.Alpha2,
-        KeyCode.Alpha3,
-        KeyCode.Alpha4,
-        KeyCode.Alpha5,
-        KeyCode.Alpha6,
-        KeyCode.Alpha7,
-        KeyCode.Alpha8,
-        KeyCode.Alpha9
-    };
-    public List <int> gotItems = new List<int>();
-
-    [Header("SCRIPTABLE OBJECT")] public ThirdPersonCharStatus status = null;
-    [HideInInspector]public ThirdPersonCharWalk walk;
-    [HideInInspector]public ThirdPersonCharJump jump;
-    [HideInInspector]public ThirdPersonCharBackPack backPack;
-    [HideInInspector]public ThirdPersonCharUpdate updater;
-    [HideInInspector]public ThirdPersonCharInputs inputs;
-    [HideInInspector]public ThirdPersonCharPause pause;
-    [HideInInspector]public Rigidbody rb;
-    [HideInInspector]public Transform charTransform;
-    // [HideInInspector]public List <int> gotItems = new List<int>();
-
+public class ThirdPersonChar : MonoBehaviour
+{
+    [Header("CAM WITH 'CAMERA' COMPONENT")] [SerializeField] private  Transform cam = null;
+    public Transform GetCam() { return this.cam; }
+    [Header("INSIDE 'PLAYER UI'")] [SerializeField] private  GameObject pausePanel = null;
+    public GameObject GetPausePanel() { return this.pausePanel; }
+    [Header("CHARACTER'S BACKPACK")] [SerializeField] private Transform backPackTransform = null;
+    public Transform GetBackPackTransform() { return this.backPackTransform; }
+    [SerializeField] private  ThirdPersonCharBackPackData backPackData = null;
+    public ThirdPersonCharBackPackData GetBackPackData() { return this.backPackData; }
+    [Header("CHARACTER'S STATUS")] [SerializeField] private ThirdPersonCharStatus status = null;
+    public ThirdPersonCharStatus GetCharStatus() { return this.status; }
+    private ThirdPersonCharWalk walk;
+    public ThirdPersonCharWalk GetWalk() { return this.walk; }
+    private ThirdPersonCharJump jump;
+    public ThirdPersonCharJump GetJump() { return this.jump; }
+    private ThirdPersonCharBackPack backPack;
+    public ThirdPersonCharBackPack GetBackPack() { return this.backPack; }
+    private ThirdPersonCharUpdate updater;
+    public ThirdPersonCharUpdate GetUpdater(){return this.updater;}
+    private ThirdPersonCharInputs inputs;
+    public ThirdPersonCharInputs GetInputs(){return this.inputs;}
+    private ThirdPersonCharPause pause;
+    public ThirdPersonCharPause GetPause(){return this.pause;}
+    private Rigidbody rb;
+    public Rigidbody GetRB() { return this.rb; }
+    private Transform charTransform;
+    public Transform GetCharTransform(){ return this.charTransform; }
 
     // private void OnEnable() {
     // }
@@ -42,9 +38,9 @@ public class ThirdPersonChar : MonoBehaviour{
     // }
     // private void OnDestroy() {
     // }
-    
+
     private void Awake() {
-        rb = getRb();
+        rb = CreateNewRB();
         charTransform = this.transform;
         walk = new ThirdPersonCharWalk(this);
         jump = new ThirdPersonCharJump(this);
@@ -56,6 +52,7 @@ public class ThirdPersonChar : MonoBehaviour{
     public void ResumeGameButton(){
         pause.SetPaused(false);
     }
+    
     private void DestroyOtherCameras(){
         Camera[] _cams = GameObject.FindObjectsOfType<Camera>();
         int destroyed = 0;
@@ -69,7 +66,7 @@ public class ThirdPersonChar : MonoBehaviour{
             Debug.LogWarning("Cameras destruídas: " + destroyed);
         }
     }
-    private Rigidbody getRb(){
+    private Rigidbody CreateNewRB(){
         if(GetComponent<Rigidbody>() == null){
             gameObject.AddComponent<Rigidbody>();
         }

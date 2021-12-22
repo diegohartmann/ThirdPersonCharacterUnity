@@ -10,13 +10,13 @@ public struct ThirdPersonCharUpdate{
         GameplayUpdater();
     }
     private void GeralUpdater(){
-        tpChar.pause.Updater();
+        tpChar.GetPause().Updater();
     }
     private void GameplayUpdater(){
-        if (!tpChar.pause.paused) { 
-            tpChar.jump.Updater();
-            tpChar.walk.Updater();
-            tpChar.backPack.Updater();
+        if (!tpChar.GetPause().IsPaused()) { 
+            tpChar.GetJump().Updater();
+            tpChar.GetWalk().Updater();
+            tpChar.GetBackPack().Updater();
         }
     }
 }

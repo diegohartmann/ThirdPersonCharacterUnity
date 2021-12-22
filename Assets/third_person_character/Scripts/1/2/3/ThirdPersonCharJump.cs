@@ -9,24 +9,25 @@ public struct ThirdPersonCharJump
         jumpFuel = 0;
     }
     public void Updater(){
-        if (tpChar.status.jumpable){
-            if (tpChar.inputs.JumpInput() && HasJumpFuel()){
-                Jump();
-                jumpFuel = 0;
+        if (tpChar.GetCharStatus().jumpable){
+            if(HasJumpFuel()){
+                if (tpChar.GetInputs().JumpInput()){
+                    Jump();
+                    return;
+                }
                 return;
             }
-            if (jumpFuel < 1){
-                jumpFuel += FrameIndependent(1);
-            }
+            RefillJumpFuel(2);
         }
     }
+    private void RefillJumpFuel(float _speed = 1){
+        jumpFuel += Time.deltaTime * _speed;
+    }
     private bool HasJumpFuel(){
-        return jumpFuel >= 1;
+        return !(jumpFuel < 1);
     }
     private void Jump(){
-        tpChar.rb.AddForce(Vector3.up * (FrameIndependent(tpChar.status.jumpForce, 5000)), ForceMode.Acceleration);
-    }
-    private float FrameIndependent(float _mult1, float _mult2 = 1){
-        return _mult1 * _mult2 * Time.deltaTime;
+        tpChar.GetRB().AddForce(Vector3.up * (tpChar.GetCharStatus().jumpForce *Time.deltaTime* 5000), ForceMode.Acceleration);
+        jumpFuel = 0;
     }
 }

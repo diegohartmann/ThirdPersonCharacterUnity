@@ -7,40 +7,39 @@ public struct ThirdPersonCharBackPack {
         DesactivateAllItems();
         WarningOnConsole();
     }
-    
     public void Updater(){
         CheckItemSelection();
     }
     private void CheckItemSelection(){
-        for (int i = 0; i < tpChar.itemsSelectInputs.Length; i++){
-            if(Input.GetKey(tpChar.itemsSelectInputs[i])){
-                for (int j = 0; j < tpChar.backpack.childCount; j++){
-                    if(j== i && tpChar.gotItems.Contains(j + 1)){
+        for (int i = 0; i < tpChar.GetBackPackData().GetItemsSelectInputs().Length; i++){
+            if(Input.GetKey(tpChar.GetBackPackData().GetItemsSelectInputs()[i])){
+                for (int j = 0; j < tpChar.GetBackPackTransform().childCount; j++){
+                    if(j== i && tpChar.GetBackPackData().GetGotItems().Contains(j + 1)){
                         DesactivateAllItems();
-                        tpChar.backpack.GetChild(j).gameObject.SetActive(true);
-                        tpChar.selectedBackPackItem = j+1;
+                        tpChar.GetBackPackTransform().GetChild(j).gameObject.SetActive(true);
+                        tpChar.GetBackPackData().SetSelectedBackPackItemIndex(j+1);
                         return;
                     }
                 }
                 return;
             }
         }
-        if(Input.GetKey(tpChar.clearHandInput)){
+        if(Input.GetKey(tpChar.GetBackPackData().GetClearHandInput())){
             DesactivateAllItems();
         }
     }
     private void DesactivateAllItems(){
-        foreach (Transform item in tpChar.backpack){
+        foreach (Transform item in tpChar.GetBackPackTransform()){
             item.gameObject.SetActive(false);
-            tpChar.selectedBackPackItem = 0;
+            tpChar.GetBackPackData().SetSelectedBackPackItemIndex(0);
         }
     }
     private void WarningOnConsole(){
-        if(tpChar.itemsSelectInputs.Length != tpChar.backpack.childCount){
+        if(tpChar.GetBackPackData().GetItemsSelectInputs().Length != tpChar.GetBackPackTransform().childCount){
             Debug.LogError("'Items Select Inputs' must have the same size as the 'backpack' child count");
         }
-        if(tpChar.clearHandInput == tpChar.itemsSelectInputs[tpChar.itemsSelectInputs.Length-1]){
-            Debug.LogError("Remove "+tpChar.clearHandInput+" from 'ThirdPersonChar.itemsSelectInputs'. It's the 'clear hand' input.");
+        if(tpChar.GetBackPackData().GetClearHandInput() == tpChar.GetBackPackData().GetItemsSelectInputs()[tpChar.GetBackPackData().GetItemsSelectInputs().Length-1]){
+            Debug.LogError("Remove "+tpChar.GetBackPackData().GetClearHandInput()+" from 'ThirdPersonChar.itemsSelectInputs'. It's the 'clear hand' input.");
         }
     }
 }

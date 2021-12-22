@@ -9,14 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c865e40e4bb114644ad8a0faf7f8e9c9, type: 3}
-  m_Name: DefaultStatus
+  m_Script: {fileID: 11500000, guid: 52d3e291b7ecf81459c4a61ac53f18dd, type: 3}
+  m_Name: BackPackData
   m_EditorClassIdentifier: 
-  turnSmoothTime: 0.34
-  slowSpeed: 4
-  walkSpeed: 10
-  runSpeed: 20
-  inclinatesForwardOnRun: 0
-  rotationSpeed: 7
-  jumpable: 1
-  jumpForce: 2.17
+  clearHandInput: 48
+  itemsSelectInputs: 3100000032000000330000003400000035000000360000003700000038000000

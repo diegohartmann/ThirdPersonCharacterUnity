@@ -3,14 +3,14 @@
 public struct ThirdPersonCharPause 
 {
     private ThirdPersonChar tpChar;
-    [HideInInspector] public bool paused;
+    private bool paused;
     public ThirdPersonCharPause(ThirdPersonChar _tpChar){
         tpChar = _tpChar;
         paused = false;
         SetPaused(false);
     }
     public void Updater(){
-        if(tpChar.inputs.PauseInput()){
+        if(tpChar.GetInputs().PauseInput()){
             PauseToggle();
         }
     }
@@ -19,7 +19,10 @@ public struct ThirdPersonCharPause
     }
     public void SetPaused(bool _paused){
         paused = _paused;
-        tpChar.pausePanel.SetActive(paused);
+        tpChar.GetPausePanel().SetActive(paused);
         Time.timeScale = paused ? 0 : 1;
+    }
+    public bool IsPaused(){
+        return paused;
     }
 }
