@@ -50,7 +50,7 @@ public class ThirdPersonChar : MonoBehaviour
         backPack = new ThirdPersonCharBackPack(this);
     }
     public void ResumeGameButton(){
-        pause.SetPaused(false);
+        pause.TogglePause();
     }
     
     private void DestroyOtherCameras(){

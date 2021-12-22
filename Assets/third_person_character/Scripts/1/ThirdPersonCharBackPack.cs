@@ -6,6 +6,13 @@ public struct ThirdPersonCharBackPack {
         tpChar = _tpChar;
         DesactivateAllItems();
         WarningOnConsole();
+        //TEST ========================================
+        FillTheInventary();
+    }
+    private void FillTheInventary(){
+        for (int i = 0; i < tpChar.GetBackPackTransform().childCount; i++){
+            tpChar.GetBackPackData().AddToGotItems(i+1);
+        }
     }
     public void Updater(){
         CheckItemSelection();

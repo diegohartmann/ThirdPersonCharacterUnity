@@ -1,24 +1,26 @@
 ﻿using UnityEngine;
 
-public struct ThirdPersonCharPause 
-{
+public struct ThirdPersonCharPause {
     private ThirdPersonChar tpChar;
     private bool paused;
     public ThirdPersonCharPause(ThirdPersonChar _tpChar){
         tpChar = _tpChar;
         paused = false;
-        SetPaused(false);
+        ApplyPauseStatus();
     }
     public void Updater(){
+        PauseCheck();
+    }
+    private void PauseCheck(){
         if(tpChar.GetInputs().PauseInput()){
-            PauseToggle();
+            TogglePause();
         }
     }
-    private void PauseToggle(){
-        SetPaused(!paused);
+    public void TogglePause(){
+        paused = !paused;
+        ApplyPauseStatus();
     }
-    public void SetPaused(bool _paused){
-        paused = _paused;
+    private void ApplyPauseStatus(){
         tpChar.GetPausePanel().SetActive(paused);
         Time.timeScale = paused ? 0 : 1;
     }
