@@ -2,32 +2,50 @@ using UnityEngine;
 
 public struct ThirdPersonCharJump
 {
-    private float jumpFuel;
+    private float distToGround;
     private ThirdPersonChar tpChar;
+    private float actualHigherJumpForce;
     public ThirdPersonCharJump(ThirdPersonChar _tpChar){
         tpChar = _tpChar;
-        jumpFuel = 0;
+        distToGround = _tpChar.GetMainCenterColl().bounds.extents.y;
+        actualHigherJumpForce = tpChar.GetCharStatus().jumpForce;
     }
+   
     public void Updater(){
-        if (tpChar.GetCharStatus().jumpable){
-            if(HasJumpFuel()){
-                if (tpChar.GetInputs().JumpInput()){
-                    Jump();
+       if (tpChar.GetCharStatus().jumpable){
+            if(IsGrounded()){
+                if(tpChar.GetCharStatus().holdToJumpHigher){
+                    ChargedJumpCheck();
                     return;
                 }
-                return;
+                SimpleJumpCheck();
             }
-            RefillJumpFuel(2);
         }
     }
-    private void RefillJumpFuel(float _speed = 1){
-        jumpFuel += Time.deltaTime * _speed;
+    private void ChargedJumpCheck(){
+        if(tpChar.GetInputs().JumpInputHold()){
+            if(actualHigherJumpForce > tpChar.GetCharStatus().higherJumpForce){
+                actualHigherJumpForce = tpChar.GetCharStatus().higherJumpForce;
+                return;
+            }
+            actualHigherJumpForce += Time.deltaTime * tpChar.GetCharStatus().speedToChargeHigherJumpForce;
+            Debug.Log(actualHigherJumpForce);
+        }
+        if (tpChar.GetInputs().JumpInputRelease()){
+            Jump(actualHigherJumpForce);
+            actualHigherJumpForce = tpChar.GetCharStatus().jumpForce;
+        }
     }
-    private bool HasJumpFuel(){
-        return !(jumpFuel < 1);
+    private void SimpleJumpCheck(){
+        if(tpChar.GetInputs().JumpInput()){
+            Jump(tpChar.GetCharStatus().jumpForce);
+        }
     }
-    private void Jump(){
-        tpChar.GetRB().AddForce(Vector3.up * (tpChar.GetCharStatus().jumpForce *Time.deltaTime* 5000), ForceMode.Acceleration);
-        jumpFuel = 0;
+    private bool IsGrounded(){
+        return Physics.Raycast(tpChar.GetCharPosition(), - Vector3.up, distToGround + 0.1f);
     }
+    private void Jump(float _force){
+        tpChar.GetRB().AddForce(Vector3.up * (_force * Time.deltaTime * 150), ForceMode.Impulse);
+    }
+   
 }

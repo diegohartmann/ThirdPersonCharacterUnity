@@ -3,34 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class ThirdPersonChar : MonoBehaviour
 {
-    [Header("CAM WITH 'CAMERA' COMPONENT")] [SerializeField] private  Transform cam = null;
-    public Transform GetCam() { return this.cam; }
-    [Header("INSIDE 'PLAYER UI'")] [SerializeField] private  GameObject pausePanel = null;
-    public GameObject GetPausePanel() { return this.pausePanel; }
-    [Header("CHARACTER'S BACKPACK")] [SerializeField] private Transform backPackTransform = null;
-    public Transform GetBackPackTransform() { return this.backPackTransform; }
-    [SerializeField] private  ThirdPersonCharBackPackData backPackData = null;
-    public ThirdPersonCharBackPackData GetBackPackData() { return this.backPackData; }
-    [Header("CHARACTER'S STATUS")] [SerializeField] private ThirdPersonCharStatus status = null;
-    public ThirdPersonCharStatus GetCharStatus() { return this.status; }
-    private ThirdPersonCharWalk walk;
-    public ThirdPersonCharWalk GetWalk() { return this.walk; }
-    private ThirdPersonCharJump jump;
-    public ThirdPersonCharJump GetJump() { return this.jump; }
-    private ThirdPersonCharBackPack backPack;
-    public ThirdPersonCharBackPack GetBackPack() { return this.backPack; }
-    private ThirdPersonCharUpdate updater;
-    public ThirdPersonCharUpdate GetUpdater(){return this.updater;}
-    private ThirdPersonCharInputs inputs;
-    public ThirdPersonCharInputs GetInputs(){return this.inputs;}
-    private ThirdPersonCharPause pause;
-    public ThirdPersonCharPause GetPause(){return this.pause;}
-    private Rigidbody rb;
-    public Rigidbody GetRB() { return this.rb; }
-    private Transform charTransform;
-    public Transform GetCharTransform(){ return this.charTransform; }
+    [Header("CHARACTER'S BODY")] [SerializeField] private Collider mainCenterColl = null; public Collider GetMainCenterColl() => this.mainCenterColl;
+    [Header("CAM WITH 'CAMERA' COMPONENT")] [SerializeField] private  Transform cam = null; public Transform GetCam() => this.cam;
+    [Header("INSIDE 'PLAYER UI'")] [SerializeField] private  GameObject pausePanel = null; public GameObject GetPausePanel() => this.pausePanel;
+    [Header("CHARACTER'S BACKPACK")] [SerializeField] private Transform backPackTransform = null; public Transform GetBackPackTransform() => this.backPackTransform;
+    [SerializeField] private  ThirdPersonCharBackPackData backPackData = null; public ThirdPersonCharBackPackData GetBackPackData() => this.backPackData;
+    [Header("CHARACTER'S STATUS")] [SerializeField] private ThirdPersonCharStatus status = null; public ThirdPersonCharStatus GetCharStatus() => this.status;
+    private ThirdPersonCharWalk walk; public ThirdPersonCharWalk GetWalk() => this.walk;
+    private ThirdPersonCharJump jump; public ThirdPersonCharJump GetJump() => this.jump;
+    private ThirdPersonCharBackPack backPack; public ThirdPersonCharBackPack GetBackPack() => this.backPack;
+    private ThirdPersonCharUpdate updater; public ThirdPersonCharUpdate GetUpdater() => this.updater;
+    private ThirdPersonCharInputs inputs; public ThirdPersonCharInputs GetInputs() => this.inputs;
+    private ThirdPersonCharPause pause; public ThirdPersonCharPause GetPause() => this.pause;
+    private Rigidbody rb; public Rigidbody GetRB() => this.rb;
+    private Transform charTransform; public Transform GetCharTransform() => this.charTransform;
+    public Vector3 GetCharPosition() => this.charTransform.position;
 
     // private void OnEnable() {
     // }
@@ -40,7 +30,6 @@ public class ThirdPersonChar : MonoBehaviour
     // }
 
     private void Awake() {
-        rb = CreateNewRB();
         charTransform = this.transform;
         walk = new ThirdPersonCharWalk(this);
         jump = new ThirdPersonCharJump(this);
@@ -48,6 +37,8 @@ public class ThirdPersonChar : MonoBehaviour
         inputs = new ThirdPersonCharInputs();
         pause = new ThirdPersonCharPause(this);
         backPack = new ThirdPersonCharBackPack(this);
+        rb = CreateNewRB();
+        DestroyOtherCameras();
     }
     public void ResumeGameButton(){
         pause.TogglePause();
@@ -67,28 +58,23 @@ public class ThirdPersonChar : MonoBehaviour
         }
     }
     private Rigidbody CreateNewRB(){
-        if(GetComponent<Rigidbody>() == null){
-            gameObject.AddComponent<Rigidbody>();
-        }
-        Rigidbody thisRB = GetComponent<Rigidbody>();
-        thisRB = rbConstrains(thisRB);
-        thisRB = rbInterpolate(thisRB);
-        thisRB = rbCollision(thisRB);
-        return thisRB;
+        Rigidbody newRB = ConfiguredRigidBody(GetComponent<Rigidbody>());
+        return newRB;
     }
-    private Rigidbody rbConstrains(Rigidbody _rb){
+
+    private Rigidbody ConfiguredRigidBody(Rigidbody _rb){
         _rb.constraints = 
             RigidbodyConstraints.FreezeRotationX |
             RigidbodyConstraints.FreezeRotationY |
             RigidbodyConstraints.FreezeRotationZ ;
-        return _rb;
-    }
-    private Rigidbody rbInterpolate(Rigidbody _rb){
-        // _rb.interpolate = Interpolate.interpolate
-        return _rb;
-    }
-    private Rigidbody rbCollision(Rigidbody _rb){
-        // rb.colissionDetect = Continuous dymanic
+        
+        _rb.mass = status.mass;
+        _rb.drag = status.drag;
+        _rb.angularDrag = status.angularDrag;
+        _rb.useGravity = status.useGravity;
+        _rb.isKinematic = status.isKinematic;
+        _rb.interpolation = status.interpolate;
+
         return _rb;
     }
     

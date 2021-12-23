@@ -19,4 +19,5 @@ public struct ThirdPersonCharUpdate{
             tpChar.GetBackPack().Updater();
         }
     }
+   
 }

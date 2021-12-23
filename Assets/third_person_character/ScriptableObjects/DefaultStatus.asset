@@ -12,6 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c865e40e4bb114644ad8a0faf7f8e9c9, type: 3}
   m_Name: DefaultStatus
   m_EditorClassIdentifier: 
+  mass: 1
+  drag: 0
+  angularDrag: 0.05
+  useGravity: 1
+  isKinematic: 0
+  interpolate: 1
   turnSmoothTime: 0.34
   slowSpeed: 4
   walkSpeed: 10
@@ -19,4 +25,7 @@ MonoBehaviour:
   inclinatesForwardOnRun: 0
   rotationSpeed: 7
   jumpable: 1
-  jumpForce: 2.17
+  jumpForce: 4.1
+  holdToJumpHigher: 1
+  higherJumpForce: 8
+  speedToChargeHigherJumpForce: 3

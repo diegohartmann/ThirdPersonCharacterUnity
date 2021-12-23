@@ -1321,6 +1321,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae8af59398de3a848b9fdc78a98fd457, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mainCenterColl: {fileID: 2999833420804250426}
   cam: {fileID: 2533893415900433403}
   pausePanel: {fileID: 7441142829683458729}
   backPackTransform: {fileID: 586272255083974691}
@@ -1341,7 +1342,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 112
-  m_CollisionDetection: 2
+  m_CollisionDetection: 1
 --- !u!1 &3764254323081154328
 GameObject:
   m_ObjectHideFlags: 0
