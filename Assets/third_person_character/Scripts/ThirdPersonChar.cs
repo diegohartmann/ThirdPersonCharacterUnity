@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class ThirdPersonChar : MonoBehaviour
-{
+public class ThirdPersonChar : MonoBehaviour{
     [Header("CHARACTER'S BODY")] [SerializeField] private Collider mainCenterColl = null; public Collider GetMainCenterColl() => this.mainCenterColl;
     [Header("CAM WITH 'CAMERA' COMPONENT")] [SerializeField] private  Transform cam = null; public Transform GetCam() => this.cam;
     [Header("INSIDE 'PLAYER UI'")] [SerializeField] private  GameObject pausePanel = null; public GameObject GetPausePanel() => this.pausePanel;
@@ -37,31 +36,25 @@ public class ThirdPersonChar : MonoBehaviour
         inputs = new ThirdPersonCharInputs();
         pause = new ThirdPersonCharPause(this);
         backPack = new ThirdPersonCharBackPack(this);
-        rb = CreateNewRB();
+        rb = ConfiguredRigidBody(GetComponent<Rigidbody>());
         DestroyOtherCameras();
     }
     public void ResumeGameButton(){
-        pause.TogglePause();
+        pause.ResumeGame();
     }
-    
     private void DestroyOtherCameras(){
         Camera[] _cams = GameObject.FindObjectsOfType<Camera>();
-        int destroyed = 0;
-        foreach (var _cam in _cams){
+        int destroyedExtraCams = 0;
+        foreach (Camera _cam in _cams){
             if (_cam.gameObject != cam.gameObject){
                 Destroy(_cam.gameObject);
-                destroyed++;
+                destroyedExtraCams++;
             }
         }
-        if(destroyed>0){
-            Debug.LogWarning("Cameras destruídas: " + destroyed);
+        if(destroyedExtraCams>0){
+            Debug.LogWarning("Cameras destruídas: " + destroyedExtraCams);
         }
     }
-    private Rigidbody CreateNewRB(){
-        Rigidbody newRB = ConfiguredRigidBody(GetComponent<Rigidbody>());
-        return newRB;
-    }
-
     private Rigidbody ConfiguredRigidBody(Rigidbody _rb){
         _rb.constraints = 
             RigidbodyConstraints.FreezeRotationX |

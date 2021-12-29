@@ -14,19 +14,15 @@ public class ThirdPersonCharStatus : ScriptableObject{
 
     [Header("WALK")]
     
-    [Range(0,5)]
-    public float turnSmoothTime = 1.2f;
-    public int slowSpeed = 5;
-    public int walkSpeed = 10;
-    public int runSpeed = 30;
-    public bool inclinatesForwardOnRun = true;
-    public int rotationSpeed = 30;
+    [Range(0.1f,0.3f)]
+    public float turnSmoothTime = 0.2f;
+    public int slowSpeed = 2;
+    public int walkSpeed = 4;
+    public int runSpeed = 8;
+    public bool inclinatesForwardOnRun = false;
     
     [Header("JUMP")]
     public bool jumpable = true;
     [Range(1,20)]
     public float jumpForce = 5;
-    public bool holdToJumpHigher = true;
-    public float higherJumpForce = 7;
-    public float speedToChargeHigherJumpForce = 2;
 }

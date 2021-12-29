@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 
-public struct ThirdPersonCharPause {
+public class ThirdPersonCharPause {
     private ThirdPersonChar tpChar;
     private bool paused;
+    public bool IsPaused() => this.paused;
+
     public ThirdPersonCharPause(ThirdPersonChar _tpChar){
-        tpChar = _tpChar;
-        paused = false;
-        ApplyPauseStatus();
+        this.tpChar = _tpChar;
+        ResumeGame();
     }
     public void Updater(){
         PauseCheck();
@@ -16,15 +17,17 @@ public struct ThirdPersonCharPause {
             TogglePause();
         }
     }
-    public void TogglePause(){
+    public void ResumeGame(){
+        paused = false;
+        ApplyPauseStatus(this.paused);
+    }
+    private void TogglePause(){
         paused = !paused;
-        ApplyPauseStatus();
+        ApplyPauseStatus(this.paused);
     }
-    private void ApplyPauseStatus(){
-        tpChar.GetPausePanel().SetActive(paused);
-        Time.timeScale = paused ? 0 : 1;
-    }
-    public bool IsPaused(){
-        return paused;
+    private void ApplyPauseStatus(bool _paused){
+        tpChar.GetPausePanel().SetActive( _paused);
+        Time.timeScale = _paused ? 0 : 1;
+        Cursor.visible = _paused;
     }
 }

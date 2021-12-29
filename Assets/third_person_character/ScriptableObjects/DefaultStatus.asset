@@ -18,14 +18,11 @@ MonoBehaviour:
   useGravity: 1
   isKinematic: 0
   interpolate: 1
-  turnSmoothTime: 0.34
-  slowSpeed: 4
-  walkSpeed: 10
-  runSpeed: 20
+  turnSmoothTime: 0.2
+  slowSpeed: 2
+  walkSpeed: 4
+  runSpeed: 8
   inclinatesForwardOnRun: 0
-  rotationSpeed: 7
+  rotationSpeed: 3
   jumpable: 1
   jumpForce: 4.1
-  holdToJumpHigher: 1
-  higherJumpForce: 8
-  speedToChargeHigherJumpForce: 3
