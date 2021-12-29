@@ -22,7 +22,7 @@ class ThirdPersonCharFadeIn : MonoBehaviour{
             img.color = new Color(img.color.r, img.color.g, img.color.b, alpha);
             return;
         }
-        onFadeIn.Invoke();
+        onFadeIn?.Invoke();
         this.gameObject.SetActive(false);
     }
 }
